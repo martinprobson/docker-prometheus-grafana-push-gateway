@@ -1,0 +1,33 @@
+version: "3.9"
+
+volumes:
+    grafana-storage:
+
+services:
+    prometheus:
+        build: prometheus/.
+        ports:
+            - "9090:9090"
+        depends_on:
+            - "prometheus-pushgateway"
+
+    grafana:
+        image: grafana/grafana-enterprise
+        volumes:
+            - grafana-storage:/var/lib/grafana
+        ports:
+            - "3000:3000"
+        depends_on:
+            - "prometheus"
+        container_name: grafana
+
+    prometheus-pushgateway:
+        image: prom/pushgateway
+        ports:
+            - "9091:9091"
+        container_name: prometheus-pushgateway
+
+
+
+
+
